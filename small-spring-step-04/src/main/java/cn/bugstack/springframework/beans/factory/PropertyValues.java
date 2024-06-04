@@ -1,7 +1,5 @@
 package cn.bugstack.springframework.beans.factory;
 
-import javafx.beans.property.Property;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +10,22 @@ import java.util.List;
  */
 public class PropertyValues {
 
-    private final List<PropertyValue> propertyValues = new ArrayList<>();
+    private final List<PropertyValue> propertyValueList = new ArrayList<>();
 
     public void addPropertyValue(PropertyValue pv) {
-        this.propertyValues.add(pv);
+        this.propertyValueList.add(pv);
+    }
+
+    public PropertyValue[] getPropertyValueList() {
+        return  this.propertyValueList.toArray(new PropertyValue[0]);
+    }
+
+    public PropertyValue getPropertyValue(String propertyName) {
+        for (PropertyValue pv : this.propertyValueList) {
+            if (pv.getName().equals(propertyName)) {
+                return pv;
+            }
+        }
+        return null;
     }
 }
