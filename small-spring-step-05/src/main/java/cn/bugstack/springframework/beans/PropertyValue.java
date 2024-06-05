@@ -1,14 +1,13 @@
-package cn.bugstack.springframework.beans.factory;
+package cn.bugstack.springframework.beans;
 
 /**
  * @description:
  * @author: wwq
- * @date: 2024/06/04/19:40
+ * @date: 2024/06/05/15:18
  */
 public class PropertyValue {
 
     private final String name;
-
     private final Object value;
 
     public PropertyValue(String name, Object value) {
@@ -24,4 +23,3 @@ public class PropertyValue {
         return value;
     }
 }
-
