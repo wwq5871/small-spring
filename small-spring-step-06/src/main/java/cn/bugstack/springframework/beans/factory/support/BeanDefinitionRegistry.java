@@ -30,7 +30,7 @@ public interface BeanDefinitionRegistry {
      * @param beanName
      * @return
      */
-    boolean containsBeanDefinition(String beanName);
+    boolean containsBeanDefinition(String beanName) throws BeansException;
 
-    String[] getBeanDefinitionNames();
+    String[] getBeanDefinitionNames() throws BeansException;
 }
