@@ -11,11 +11,12 @@ import java.util.List;
 /**
  * @description:
  * @author: wwq
- * @date: 2024/06/07/16:59
+ * @date: 2024/06/12/18:09
  */
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
-
-    
+    /**
+     * BeanPostProcessors to apply in createBean
+     */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
     @Override
@@ -33,27 +34,16 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         return (T) getBean(name);
     }
 
-    private <T> T doGetBean(String name, Object[] args) {
+    private <T> T doGetBean(String name, final Object[] args) {
         Object bean = getSingleton(name);
         if (bean != null) {
             return (T) bean;
         }
-
         BeanDefinition beanDefinition = getBeanDefinition(name);
-        return createBean(name, beanDefinition, args);
+        return (T) createBean(name, beanDefinition, args);
     }
 
     protected abstract BeanDefinition getBeanDefinition(String name) throws BeansException;
 
-    protected abstract <T> T createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException;
-
-    @Override
-    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
-        this.beanPostProcessors.remove(beanPostProcessor);
-        this.beanPostProcessors.add(beanPostProcessor);
-    }
-
-    public List<BeanPostProcessor> getBeanPostProcessors() {
-        return this.beanPostProcessors;
-    }
+    protected abstract Object createBean(String name, BeanDefinition beanDefinition, Object[] args) throws BeansException;
 }
