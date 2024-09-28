@@ -32,7 +32,7 @@ public class ResourceAndResourceLoaderTest {
         assertThat(content).isEqualTo("hello world");
 
         // 加载文件系统资源
-        resourceLoader.getResource("src/test/resources/hello.txt");
+        resource = resourceLoader.getResource("src/test/resources/hello.txt");
         assertThat(resource instanceof FileSystemResource).isTrue();
         inputStream = resource.getInputStream();
         content = IoUtil.readUtf8(inputStream);
