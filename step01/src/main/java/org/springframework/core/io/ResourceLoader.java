@@ -1,4 +1,4 @@
-package org.springframework.io;
+package org.springframework.core.io;
 
 /**
  * @author mikael wang

@@ -1,4 +1,4 @@
-package org.springframework.io;
+package org.springframework.core.io;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

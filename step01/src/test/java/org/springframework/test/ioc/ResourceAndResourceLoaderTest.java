@@ -2,16 +2,16 @@ package org.springframework.test.ioc;
 
 import cn.hutool.core.io.IoUtil;
 import org.junit.Test;
-import org.springframework.io.DefaultResourceLoader;
-import org.springframework.io.FileSystemResource;
-import org.springframework.io.Resource;
-import org.springframework.io.UrlResource;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.in;
 
 /**
  * @author mikael wang
