@@ -10,8 +10,9 @@ import org.springframework.beans.PropertyValues;
 public class BeanDefinition {
 
     private Class beanClass;
-
     private PropertyValues propertyValues;
+    private String initMethodeName;
+    private String destroyMethodName;
 
     public BeanDefinition(Class beanClass) {
         this(beanClass, null);
@@ -36,5 +37,21 @@ public class BeanDefinition {
 
     public void setPropertyValues(PropertyValues propertyValues) {
         this.propertyValues = propertyValues;
+    }
+
+    public String getInitMethodeName() {
+        return initMethodeName;
+    }
+
+    public void setInitMethodeName(String initMethodeName) {
+        this.initMethodeName = initMethodeName;
+    }
+
+    public String getDestroyMethodName() {
+        return destroyMethodName;
+    }
+
+    public void setDestroyMethodName(String destroyMethodName) {
+        this.destroyMethodName = destroyMethodName;
     }
 }
