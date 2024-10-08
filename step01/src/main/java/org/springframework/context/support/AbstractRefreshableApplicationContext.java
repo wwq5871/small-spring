@@ -36,6 +36,7 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
      */
     protected abstract void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException;
 
+    @Override
     public DefaultListableBeanFactory getBeanFactory() {
         return beanFactory;
     }
