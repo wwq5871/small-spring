@@ -3,11 +3,10 @@ package org.springframework.beans.factory;
 import org.springframework.beans.BeansException;
 
 /**
- * @description:
- * @author: wwq
- * @date: 2024/10/08/14:38
+ * @author mikael wang
+ * @date 2024/10/8 22:19
  */
-public interface BeanFactoryAware extends Aware{
+public interface BeanFactoryAware extends Aware {
 
     void setBeanFactory(BeanFactory beanFactory) throws BeansException;
 }
