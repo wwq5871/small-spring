@@ -6,6 +6,8 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValue;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -36,7 +38,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             // 为bean填充属性
             applyPropertyValues(beanName, bean, beanDefinition);
             // 执行bean的初始化方法和BeanPostProcessor的前置和后置处理方法
-            bean = initializeBean(beanName, bean, beanDefinition);
+            initializeBean(beanName, bean, beanDefinition);
         } catch (Exception e) {
             throw new BeansException("Instance of bean failed", e);
         }
@@ -48,16 +50,33 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return bean;
     }
 
+    /**
+     * 注册有销毁方法的bean,即bean继承自DisposableBean或自定义的销毁方法
+     * @param beanName
+     * @param bean
+     * @param beanDefinition
+     */
     private void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
         if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
             registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
         }
     }
 
+    /**
+     * 实例化bean
+     * @param beanDefinition
+     * @return
+     */
     protected Object createBeanInstance(BeanDefinition beanDefinition) {
         return getInstantiationStrategy().instantiate(beanDefinition);
     }
 
+    /**
+     * 为bean填充属性
+     * @param beanName
+     * @param bean
+     * @param beanDefinition
+     */
     private void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
         try {
             for (PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValues()) {
@@ -77,10 +96,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        if (bean instanceof BeanFactoryAware) {
+            ((BeanFactoryAware) bean).setBeanFactory(this);
+        }
+
         // 执行bean的前置处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
 
-        // TODO 后续会在此处执行bean的初始化方法
         try {
             invokeInitMethods(beanName, wrappedBean, beanDefinition);
         } catch (Throwable e) {

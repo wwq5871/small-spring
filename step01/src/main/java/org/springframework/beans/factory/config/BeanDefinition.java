@@ -7,6 +7,7 @@ import org.springframework.beans.PropertyValues;
  * @author mikael wang
  * @date 2024/9/23 20:40
  */
+@SuppressWarnings("rawtypes")
 public class BeanDefinition {
 
     private Class beanClass;

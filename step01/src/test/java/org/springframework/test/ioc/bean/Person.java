@@ -25,7 +25,7 @@ public class Person implements InitializingBean, DisposableBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("I war born in the method named afterPropertiesSet");
+        System.out.println("I was born in the method named afterPropertiesSet");
     }
 
     @Override
