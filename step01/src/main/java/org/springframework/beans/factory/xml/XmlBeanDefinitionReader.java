@@ -77,7 +77,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         Element beans = document.getRootElement();
         List<Element> beanList = beans.elements(BEAN_ELEMENT);
         for (Element bean : beanList) {
-            String beanId = bean.attributeValue(BEAN_ELEMENT);
+            String beanId = bean.attributeValue(ID_ATTRIBUTE);
             String beanName = bean.attributeValue(NAME_ATTRIBUTE);
             String className = bean.attributeValue(CLASS_ATTRIBUTE);
             String initMethodName = bean.attributeValue(INIT_METHOD_ATTRIBUTE);
@@ -118,6 +118,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 if (StrUtil.isNotEmpty(propertyRefAttribute)) {
                     value = new BeanReference(propertyRefAttribute);
                 }
+                PropertyValue propertyValue = new PropertyValue(propertyNameAttribute, value);
+                beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
                 if (getRegistry().containsBeanDefinition(beanName)) {
                     // beanName不能重名
                     throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
