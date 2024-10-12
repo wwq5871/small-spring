@@ -4,6 +4,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ApplicationEventMulticaster;
@@ -106,7 +107,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         publishEvent(new ContextRefreshedEvent(this));
     }
 
-    private void publishEvent(ContextRefreshedEvent event) {
+
+    @Override
+    public void publishEvent(ApplicationEvent event) {
         applicationEventMulticaster.multicastEvent(event);
     }
 
