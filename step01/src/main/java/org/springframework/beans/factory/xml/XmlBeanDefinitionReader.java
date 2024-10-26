@@ -1,9 +1,6 @@
 package org.springframework.beans.factory.xml;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.XmlUtil;
-import jdk.management.resource.internal.inst.FileOutputStreamRMHooks;
-import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -17,7 +14,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.w3c.dom.NodeList;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -120,13 +116,13 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 }
                 PropertyValue propertyValue = new PropertyValue(propertyNameAttribute, value);
                 beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
-                if (getRegistry().containsBeanDefinition(beanName)) {
-                    // beanName不能重名
-                    throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
-                }
-                // 注册BeanDefinition
-                getRegistry().registerBeanDefinition(beanName, beanDefinition);
             }
+            if (getRegistry().containsBeanDefinition(beanName)) {
+                // beanName不能重名
+                throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
+            }
+            // 注册BeanDefinition
+            getRegistry().registerBeanDefinition(beanName, beanDefinition);
         }
     }
 }

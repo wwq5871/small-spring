@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ApplicationEventMulticaster;
+import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.SimpleApplicationEventMulticaster;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -149,7 +150,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     protected void doClose() {
         // 发布容器关闭事件
-        publishEvent(new ContextRefreshedEvent(this));
+        publishEvent(new ContextClosedEvent(this));
 
         // 执行单例bean的销毁方法
         destroyBeans();
