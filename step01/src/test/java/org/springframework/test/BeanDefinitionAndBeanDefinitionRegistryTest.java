@@ -1,10 +1,10 @@
-package org.springframework.test.ioc;
+package org.springframework.test;
 
 import org.junit.Test;
 
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.test.ioc.service.HelloService;
+import org.springframework.test.service.HelloService;
 
 /**
  * @author mikael wang
