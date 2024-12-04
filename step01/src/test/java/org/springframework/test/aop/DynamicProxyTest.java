@@ -81,46 +81,6 @@ public class DynamicProxyTest {
         proxy.explode();
     }
 
-
-    @Test
-    public void testAfterAdvise() throws Exception{
-        // 设置AfterAdvice
-        WorldServiceAfterAdvice afterAdvice = new WorldServiceAfterAdvice();
-        GenericInterceptor methodInterceptor = new GenericInterceptor();
-        methodInterceptor.setAfterAdvice(afterAdvice);
-        advisedSupport.setMethodInterceptor(methodInterceptor);
-
-        WorldService proxy = (WorldService) new ProxyFactory(advisedSupport).getProxy();
-        proxy.explode();
-
-    }
-
-
-    @Test
-    public void testAfterReturningAdvice() throws Exception {
-        // 设置AfterReturningAdvice
-        WorldServiceAfterReturningAdvice afterReturningAdvice = new WorldServiceAfterReturningAdvice();
-        GenericInterceptor methodInterceptor = new GenericInterceptor();
-        methodInterceptor.setAfterReturningAdvice(afterReturningAdvice);
-        advisedSupport.setMethodInterceptor(methodInterceptor);
-
-        WorldService proxy = (WorldService) new ProxyFactory(advisedSupport).getProxy();
-        proxy.explode();
-    }
-
-    @Test
-    public void testThrowsAdvice() throws Exception {
-        WorldService worldService = new WorldServiceWithExceptionImpl();
-        // 设置ThrowsAdvice
-        WorldServiceThrowsAdvice throwsAdvice = new WorldServiceThrowsAdvice();
-        GenericInterceptor methodInterceptor = new GenericInterceptor();
-        advisedSupport.setMethodInterceptor(methodInterceptor);
-        advisedSupport.setTargetSource(new TargetSource(new TargetSource(worldService)));
-
-        WorldService proxy = (WorldService) new ProxyFactory(advisedSupport).getProxy();
-        proxy.explode();
-    }
-
     @Test
     public void testAllAdvice() throws Exception {
         // 设置before、after、afterReturning
