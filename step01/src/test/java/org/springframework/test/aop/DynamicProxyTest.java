@@ -1,12 +1,15 @@
 package org.springframework.test.aop;
 
+import org.aopalliance.intercept.MethodInterceptor;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.aop.*;
 import org.springframework.aop.aspectj.AspectJExpressionPointcut;
+import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.aop.framework.CglibAopProxy;
 import org.springframework.aop.framework.JdkDynamicAopProxy;
 import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor;
 import org.springframework.test.common.WorldServiceAfterAdvice;
 import org.springframework.test.common.WorldServiceAfterReturningAdvice;
 import org.springframework.test.common.WorldServiceBeforeAdvice;
@@ -145,6 +148,32 @@ public class DynamicProxyTest {
         WorldService proxy = (WorldService) new ProxyFactory(advisedSupport).getProxy();
         proxy.explode();
 
+    }
+
+    @Test
+    public void testAdvisor() throws Exception {
+        WorldServiceImpl worldService = new WorldServiceImpl();
+
+        // Advisor是Pointcut和Advise的组合
+        String expression = "execution(* org.springframework.test.service.WorldService.explode(..))";
+        AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
+        advisor.setExpression(expression);
+        MethodBeforeAdviceInterceptor methodInterceptor = new MethodBeforeAdviceInterceptor(new WorldServiceBeforeAdvice());
+        advisor.setAdvice(methodInterceptor);
+
+        ClassFilter classFilter = advisor.getPointcut().getClassFilter();
+        if (classFilter.matches(worldService.getClass())) {
+            AdvisedSupport advisedSupport = new AdvisedSupport();
+
+            TargetSource targetSource = new TargetSource(worldService);
+            advisedSupport.setTargetSource(targetSource);
+            advisedSupport.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
+            advisedSupport.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
+
+            WorldService proxy = (WorldService) new ProxyFactory(advisedSupport).getProxy();
+            proxy.explode();
+
+        }
     }
 
 

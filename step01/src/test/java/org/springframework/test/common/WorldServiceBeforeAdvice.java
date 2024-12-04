@@ -1,6 +1,7 @@
 package org.springframework.test.common;
 
 import org.springframework.aop.BeforeAdvice;
+import org.springframework.aop.MethodBeforeAdvice;
 
 import java.lang.reflect.Method;
 
@@ -9,7 +10,7 @@ import java.lang.reflect.Method;
  * @author: wwq
  * @date: 2024/12/03/17:24
  */
-public class WorldServiceBeforeAdvice implements BeforeAdvice {
+public class WorldServiceBeforeAdvice implements MethodBeforeAdvice {
 
 
     @Override
