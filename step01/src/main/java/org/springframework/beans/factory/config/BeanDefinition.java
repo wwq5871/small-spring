@@ -3,6 +3,8 @@ package org.springframework.beans.factory.config;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.PropertyValues;
 
+import java.util.Objects;
+
 /**
  * @author mikael wang
  * @date 2024/9/23 20:40
@@ -78,5 +80,18 @@ public class BeanDefinition {
 
     public void setDestroyMethodName(String destroyMethodName) {
         this.destroyMethodName = destroyMethodName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BeanDefinition that = (BeanDefinition) o;
+        return beanClass.equals(that.beanClass);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(beanClass);
     }
 }
