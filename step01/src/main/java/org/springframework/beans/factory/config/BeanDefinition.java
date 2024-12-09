@@ -14,10 +14,15 @@ public class BeanDefinition {
 
 
     private static String SCOPE_SINGLETON = "singleton";
+
     private static String SCOPE_PROTOTYPE = "prototype";
+
     private Class beanClass;
+
     private PropertyValues propertyValues;
+
     private String initMethodeName;
+
     private String destroyMethodName;
 
     private String scope = SCOPE_SINGLETON;
