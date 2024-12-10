@@ -75,7 +75,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
         Element root = document.getRootElement();
 
-        // 解析context:component-scan标签病扫描指定包中的类，提取类信息，组装成BeanDefinition
+        // 解析context:component-scan标签并扫描指定包中的类，提取类信息，组装成BeanDefinition
         Element componentScan = root.element(COMPONENT_SCAN_ELEMENT);
         if (componentScan != null) {
             String scanPath = componentScan.attributeValue(BASE_PACKAGE_ATTRIBUTE);
