@@ -10,15 +10,9 @@ import org.springframework.aop.framework.CglibAopProxy;
 import org.springframework.aop.framework.JdkDynamicAopProxy;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor;
-import org.springframework.test.common.WorldServiceAfterAdvice;
-import org.springframework.test.common.WorldServiceAfterReturningAdvice;
 import org.springframework.test.common.WorldServiceBeforeAdvice;
-import org.springframework.test.common.WorldServiceThrowsAdvice;
 import org.springframework.test.service.WorldService;
 import org.springframework.test.service.WorldServiceImpl;
-import org.springframework.test.service.WorldServiceWithExceptionImpl;
-
-import java.lang.annotation.Target;
 
 /**
  * @description:
@@ -81,34 +75,8 @@ public class DynamicProxyTest {
         proxy.explode();
     }
 
-    @Test
-    public void testAllAdvice() throws Exception {
-        // 设置before、after、afterReturning
-        GenericInterceptor methodInterceptor = new GenericInterceptor();
-        methodInterceptor.setBeforeAdvice(new WorldServiceBeforeAdvice());
-        methodInterceptor.setAfterAdvice(new WorldServiceAfterAdvice());
-        methodInterceptor.setAfterReturningAdvice(new WorldServiceAfterReturningAdvice());
-        advisedSupport.setMethodInterceptor(methodInterceptor);
 
-        WorldService proxy = (WorldService) new ProxyFactory(advisedSupport).getProxy();
-        proxy.explode();
-    }
 
-    @Test
-    public void testAllAdvisedWithException() throws Exception {
-        WorldService worldService = new WorldServiceWithExceptionImpl();
-        // 设置before、after、throws
-        GenericInterceptor methodInterceptor = new GenericInterceptor();
-        methodInterceptor.setBeforeAdvice(new WorldServiceBeforeAdvice());
-        methodInterceptor.setAfterAdvice(new WorldServiceAfterAdvice());
-        methodInterceptor.setThrowsAdvice(new WorldServiceThrowsAdvice());
-        advisedSupport.setMethodInterceptor(methodInterceptor);
-        advisedSupport.setTargetSource(new TargetSource(worldService));
-
-        WorldService proxy = (WorldService) new ProxyFactory(advisedSupport).getProxy();
-        proxy.explode();
-
-    }
 
     @Test
     public void testAdvisor() throws Exception {

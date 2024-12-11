@@ -1,6 +1,7 @@
 package org.springframework.beans.factory.config;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.PropertyValues;
 
 /**
  * @description:
@@ -19,7 +20,7 @@ public interface BeanPostProcessor {
     Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException;
 
     /**
-     *在bean初始化方法之后执行此方法
+     *
      * @param bean
      * @param beanName
      * @return

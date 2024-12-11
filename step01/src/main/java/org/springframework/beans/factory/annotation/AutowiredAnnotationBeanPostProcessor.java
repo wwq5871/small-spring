@@ -11,8 +11,10 @@ import org.springframework.beans.factory.config.InstantiationAwareBeanPostProces
 import java.lang.reflect.Field;
 
 /**
- * @author mikael wang
- * @date 2024/12/8 20:21
+ * 处理@Autowired和@Value注解的BeanPostProcessor
+ *
+ * @author derekyi
+ * @date 2020/12/27
  */
 public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareBeanPostProcessor, BeanFactoryAware {
 
@@ -25,7 +27,7 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
 
     @Override
     public PropertyValues postProcessPropertyValues(PropertyValues pvs, Object bean, String beanName) throws BeansException {
-        // 处理@Value注解
+        //处理@Value注解
         Class<?> clazz = bean.getClass();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
@@ -37,7 +39,7 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
             }
         }
 
-        // 处理@Autowired注解（下一节实现）
+        //处理@Autowired注解
         for (Field field : fields) {
             Autowired autowiredAnnotation = field.getAnnotation(Autowired.class);
             if (autowiredAnnotation != null) {
@@ -54,12 +56,18 @@ public class AutowiredAnnotationBeanPostProcessor implements InstantiationAwareB
                 BeanUtil.setFieldValue(bean, field.getName(), dependentBean);
             }
         }
+
         return pvs;
     }
 
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
         return null;
+    }
+
+    @Override
+    public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
+        return true;
     }
 
     @Override
