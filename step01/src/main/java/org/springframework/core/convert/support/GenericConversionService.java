@@ -1,8 +1,8 @@
 package org.springframework.core.convert.support;
 
-import jdk.nashorn.internal.ir.WhileNode;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.core.convert.converter.GenericConverter.ConvertiblePair;
@@ -43,16 +43,22 @@ public class GenericConversionService implements ConversionService, ConverterReg
     }
 
     @Override
-    public void addConverterFactory(Converter<?, ?> converterFactory) {
-
+    public void addConverterFactory(ConverterFactory<?, ?> converterFactory) {
+        ConvertiblePair typeInfo = getRequiredTypeInfo(converterFactory);
+        ConverterFactoryAdapter converterFactoryAdapter = new ConverterFactoryAdapter(typeInfo, converterFactory);
+        for (ConvertiblePair convertiblePair : converterFactoryAdapter.getConvertibleTypes()) {
+            converters.put(convertiblePair, converterFactoryAdapter);
+        }
     }
 
     @Override
     public void addConverter(GenericConverter converter) {
-
+        for (ConvertiblePair convertiblePair : converter.getConvertibleTypes()) {
+            converters.put(convertiblePair, converter);
+        }
     }
 
-    private ConvertiblePair getRequiredTypeInfo(Converter<?,?> object) {
+    private ConvertiblePair getRequiredTypeInfo(Object object) {
         Type[] types = object.getClass().getGenericInterfaces();
         ParameterizedType parameterized = (ParameterizedType) types[0];
         Type[] actualTypeArguments = parameterized.getActualTypeArguments();
@@ -105,6 +111,29 @@ public class GenericConversionService implements ConversionService, ConverterReg
         @Override
         public Object convert(Object source, Class sourceType, Class targetType) {
             return converter.convert(source);
+        }
+    }
+
+    private final class ConverterFactoryAdapter implements GenericConverter{
+
+        private final ConvertiblePair typeInfo;
+
+        private final ConverterFactory<Object, Object> converterFactory;
+
+
+        public ConverterFactoryAdapter(ConvertiblePair typeInfo, ConverterFactory<?, ?> converterFactory) {
+            this.typeInfo = typeInfo;
+            this.converterFactory = (ConverterFactory<Object, Object>) converterFactory;
+        }
+
+        @Override
+        public Set<ConvertiblePair> getConvertibleTypes() {
+            return Collections.singleton(typeInfo);
+        }
+
+        @Override
+        public Object convert(Object source, Class sourceType, Class targetType) {
+            return converterFactory.getConverter(targetType).convert(source);
         }
     }
 }

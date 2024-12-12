@@ -9,7 +9,7 @@ public interface ConverterRegistry {
 
     void addConverter(Converter<?, ?> converter);
 
-    void addConverterFactory(Converter<?, ?> converterFactory);
+    void addConverterFactory(ConverterFactory<?, ?> converterFactory);
 
     void addConverter(GenericConverter converter);
 }
