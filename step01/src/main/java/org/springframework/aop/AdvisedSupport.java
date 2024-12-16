@@ -2,6 +2,14 @@ package org.springframework.aop;
 
 
 import org.aopalliance.intercept.MethodInterceptor;
+import org.springframework.aop.framework.AdvisorChainFactory;
+import org.springframework.aop.framework.DefaultAdvisorChainFactory;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @description:
@@ -18,6 +26,25 @@ public class AdvisedSupport {
     private MethodInterceptor methodInterceptor;
 
     private MethodMatcher methodMatcher;
+
+    private transient Map<Integer, List<Object>> methodCache;
+
+    AdvisorChainFactory advisorChainFactory = new DefaultAdvisorChainFactory();
+
+    private List<Advisor> advisors = new ArrayList<>();
+
+    public List<Advisor> getAdvisors() {
+        return advisors;
+    }
+
+    public void addAdvisor(Advisor advisor) {
+        advisors.add(advisor);
+    }
+
+
+    public AdvisedSupport() {
+        this.methodCache = new ConcurrentHashMap<>(32);
+    }
 
 
     public TargetSource getTargetSource() {
@@ -51,4 +78,22 @@ public class AdvisedSupport {
     public void setProxyTargetClass(boolean proxyTargetClass) {
         this.proxyTargetClass = proxyTargetClass;
     }
+
+    /**
+     * 用来返回方法的拦截器链
+     * @param method
+     * @param targetClass
+     * @return
+     */
+    public List<Object> getInterceptorsAndDynamicInterceptionAdvice(Method method, Class<?> targetClass) {
+        Integer cacheKey = method.hashCode();
+        List<Object> cached = this.methodCache.get(cacheKey);
+        if (cached == null) {
+            cached = this.advisorChainFactory.getInterceptorsAndDynamicInterceptionAdvice(
+                    this, method, targetClass);
+            this.methodCache.put(cacheKey, cached);
+        }
+        return cached;
+    }
+
 }

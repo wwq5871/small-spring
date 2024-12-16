@@ -102,11 +102,11 @@ public class BeanDefinition {
         return Objects.hash(beanClass);
     }
 
-    public boolean isLazyInit() {
-        return lazyInit;
-    }
-
     public void setLazyInit(boolean b) {
         this.lazyInit = b;
+    }
+
+    public boolean isLazyInit() {
+        return lazyInit;
     }
 }
