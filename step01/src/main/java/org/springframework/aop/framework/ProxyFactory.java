@@ -9,22 +9,21 @@ import java.lang.reflect.Proxy;
  * @author: wwq
  * @date: 2024/12/03/14:27
  */
-public class ProxyFactory {
+public class ProxyFactory extends AdvisedSupport{
 
-    private AdvisedSupport advisedSupport;
 
-    public ProxyFactory(AdvisedSupport advisedSupport) {
-        this.advisedSupport = advisedSupport;
+    public ProxyFactory() {
     }
+
 
     public Object getProxy() {
         return createAopProxy().getProxy();
     }
 
     private AopProxy createAopProxy() {
-        if (advisedSupport.isProxyTargetClass()) {
-            return new CglibAopProxy(advisedSupport);
+        if (this.isProxyTargetClass() || this.getTargetSource().getTargetClass().length == 0) {
+            return new CglibAopProxy(this);
         }
-        return new JdkDynamicAopProxy(advisedSupport);
+        return new JdkDynamicAopProxy(this);
     }
 }

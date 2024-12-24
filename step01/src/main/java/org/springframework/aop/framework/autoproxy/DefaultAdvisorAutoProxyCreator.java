@@ -22,6 +22,7 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
 
     private DefaultListableBeanFactory beanFactory;
 
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         //避免死循环
