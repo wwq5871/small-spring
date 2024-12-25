@@ -2,6 +2,7 @@ package org.springframework.beans.factory.support;
 
 import org.springframework.beans.BeansException;
 import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
@@ -19,7 +20,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
         this(registry, new DefaultResourceLoader());
     }
 
-    public AbstractBeanDefinitionReader(BeanDefinitionRegistry registry, DefaultResourceLoader resourceLoader) {
+    public AbstractBeanDefinitionReader(BeanDefinitionRegistry registry, ResourceLoader resourceLoader) {
         this.registry = registry;
         this.resourceLoader = resourceLoader;
     }

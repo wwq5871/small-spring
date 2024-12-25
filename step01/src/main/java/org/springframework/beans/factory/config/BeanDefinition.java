@@ -1,6 +1,5 @@
 package org.springframework.beans.factory.config;
 
-import org.springframework.beans.PropertyValue;
 import org.springframework.beans.PropertyValues;
 
 import java.util.Objects;
@@ -77,7 +76,7 @@ public class BeanDefinition {
         return initMethodeName;
     }
 
-    public void setInitMethodeName(String initMethodeName) {
+    public void setInitMethodName(String initMethodeName) {
         this.initMethodeName = initMethodeName;
     }
 

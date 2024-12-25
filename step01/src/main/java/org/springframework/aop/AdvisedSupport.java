@@ -1,6 +1,5 @@
 package org.springframework.aop;
 
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.aop.framework.AdvisorChainFactory;
 import org.springframework.aop.framework.DefaultAdvisorChainFactory;
@@ -12,18 +11,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @description:
- * @author: wwq
- * @date: 2024/12/02/17:19
+ * @author zqc
+ * @date 2022/12/16
  */
 public class AdvisedSupport {
 
-    // 是否使用cglib代理
-    private boolean proxyTargetClass = false;
+    //是否使用cglib代理
+    private boolean proxyTargetClass = true;
 
     private TargetSource targetSource;
 
-    private MethodInterceptor methodInterceptor;
 
     private MethodMatcher methodMatcher;
 
@@ -33,19 +30,24 @@ public class AdvisedSupport {
 
     private List<Advisor> advisors = new ArrayList<>();
 
-    public List<Advisor> getAdvisors() {
-        return advisors;
+    public AdvisedSupport() {
+        this.methodCache = new ConcurrentHashMap<>(32);
+    }
+    public boolean isProxyTargetClass() {
+        return proxyTargetClass;
+    }
+
+    public void setProxyTargetClass(boolean proxyTargetClass) {
+        this.proxyTargetClass = proxyTargetClass;
     }
 
     public void addAdvisor(Advisor advisor) {
         advisors.add(advisor);
     }
 
-
-    public AdvisedSupport() {
-        this.methodCache = new ConcurrentHashMap<>(32);
+    public List<Advisor> getAdvisors() {
+        return advisors;
     }
-
 
     public TargetSource getTargetSource() {
         return targetSource;
@@ -55,13 +57,6 @@ public class AdvisedSupport {
         this.targetSource = targetSource;
     }
 
-    public MethodInterceptor getMethodInterceptor() {
-        return methodInterceptor;
-    }
-
-    public void setMethodInterceptor(MethodInterceptor methodInterceptor) {
-        this.methodInterceptor = methodInterceptor;
-    }
 
     public MethodMatcher getMethodMatcher() {
         return methodMatcher;
@@ -70,23 +65,11 @@ public class AdvisedSupport {
     public void setMethodMatcher(MethodMatcher methodMatcher) {
         this.methodMatcher = methodMatcher;
     }
-
-    public boolean isProxyTargetClass() {
-        return proxyTargetClass;
-    }
-
-    public void setProxyTargetClass(boolean proxyTargetClass) {
-        this.proxyTargetClass = proxyTargetClass;
-    }
-
     /**
      * 用来返回方法的拦截器链
-     * @param method
-     * @param targetClass
-     * @return
      */
     public List<Object> getInterceptorsAndDynamicInterceptionAdvice(Method method, Class<?> targetClass) {
-        Integer cacheKey = method.hashCode();
+        Integer cacheKey=method.hashCode();
         List<Object> cached = this.methodCache.get(cacheKey);
         if (cached == null) {
             cached = this.advisorChainFactory.getInterceptorsAndDynamicInterceptionAdvice(
@@ -95,5 +78,4 @@ public class AdvisedSupport {
         }
         return cached;
     }
-
 }

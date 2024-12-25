@@ -5,11 +5,10 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
- * @author mikael wang
- * @date 2024/9/28 11:57
+ * @author derekyi
+ * @date 2020/11/24
  */
 @Component
 public class Car {
@@ -30,7 +29,6 @@ public class Car {
     public void setBrand(String brand) {
         this.brand = brand;
     }
-
 
     public int getPrice() {
         return price;
@@ -62,7 +60,7 @@ public class Car {
         return "Car{" +
                 "price=" + price +
                 ", produceDate=" + produceDate +
-                "brand='" + brand + '\'' +
+                ", brand='" + brand + '\'' +
                 '}';
     }
 }

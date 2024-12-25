@@ -1,16 +1,12 @@
 package org.springframework.test.ioc;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Test;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.bean.Car;
 
-import java.util.concurrent.TimeUnit;
-
-/**
- * @description:
- * @author: wwq
- * @date: 2024/12/16/19:28
- */
 public class LazyInitTest {
 
     @Test
@@ -18,7 +14,7 @@ public class LazyInitTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:lazy-test.xml");
         System.out.println(System.currentTimeMillis() + ":applicationContext-over");
         TimeUnit.SECONDS.sleep(2);
-        Car car = (Car) applicationContext.getBean("car");
-        car.showTime();
+        Car c = (Car) applicationContext.getBean("car");
+        c.showTime();//显示bean的创建时间
     }
 }

@@ -1,10 +1,12 @@
 package org.springframework.beans.factory.xml;
 
+
 import cn.hutool.core.util.StrUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -12,7 +14,6 @@ import org.springframework.beans.factory.config.BeanReference;
 import org.springframework.beans.factory.support.AbstractBeanDefinitionReader;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
@@ -21,9 +22,10 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * @description:
- * @author: wwq
- * @date: 2024/09/30/14:29
+ * 读取配置在xml文件中的bean定义信息
+ *
+ * @author derekyi
+ * @date 2020/11/26
  */
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
@@ -45,7 +47,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         super(registry);
     }
 
-    public XmlBeanDefinitionReader(BeanDefinitionRegistry registry, DefaultResourceLoader resourceLoader) {
+    public XmlBeanDefinitionReader(BeanDefinitionRegistry registry, ResourceLoader resourceLoader) {
         super(registry, resourceLoader);
     }
 
@@ -76,7 +78,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
         Element root = document.getRootElement();
 
-        // 解析context:component-scan标签并扫描指定包中的类，提取类信息，组装成BeanDefinition
+        //解析context:component-scan标签并扫描指定包中的类，提取类信息，组装成BeanDefinition
         Element componentScan = root.element(COMPONENT_SCAN_ELEMENT);
         if (componentScan != null) {
             String scanPath = componentScan.attributeValue(BASE_PACKAGE_ATTRIBUTE);
@@ -85,8 +87,6 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             }
             scanPackage(scanPath);
         }
-
-
 
         List<Element> beanList = root.elements(BEAN_ELEMENT);
         for (Element bean : beanList) {
@@ -97,22 +97,21 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String destroyMethodName = bean.attributeValue(DESTROY_METHOD_ATTRIBUTE);
             String beanScope = bean.attributeValue(SCOPE_ATTRIBUTE);
             String lazyInit = bean.attributeValue(LAZYINIT_ATTRIBUTE);
-
             Class<?> clazz;
             try {
                 clazz = Class.forName(className);
             } catch (ClassNotFoundException e) {
                 throw new BeansException("Cannot find class [" + className + "]");
             }
-            // id优先于name
+            //id优先于name
             beanName = StrUtil.isNotEmpty(beanId) ? beanId : beanName;
             if (StrUtil.isEmpty(beanName)) {
-                // 如果id和name都为空, 将类名的第一个字母转为小写后作为bean的名称
+                //如果id和name都为空，将类名的第一个字母转为小写后作为bean的名称
                 beanName = StrUtil.lowerFirst(clazz.getSimpleName());
             }
 
             BeanDefinition beanDefinition = new BeanDefinition(clazz);
-            beanDefinition.setInitMethodeName(initMethodName);
+            beanDefinition.setInitMethodName(initMethodName);
             beanDefinition.setDestroyMethodName(destroyMethodName);
             beanDefinition.setLazyInit(Boolean.parseBoolean(lazyInit));
             if (StrUtil.isNotEmpty(beanScope)) {
@@ -137,21 +136,22 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
             }
             if (getRegistry().containsBeanDefinition(beanName)) {
-                // beanName不能重名
+                //beanName不能重名
                 throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
             }
-            // 注册BeanDefinition
+            //注册BeanDefinition
             getRegistry().registerBeanDefinition(beanName, beanDefinition);
         }
     }
 
     /**
-     * 扫描注解Component的类， 提取信息， 组装成BeanDefinition
+     * 扫描注解Component的类，提取信息，组装成BeanDefinition
+     *
      * @param scanPath
      */
     private void scanPackage(String scanPath) {
-        String[] basePackage = StrUtil.splitToArray(scanPath, ',');
+        String[] basePackages = StrUtil.splitToArray(scanPath, ',');
         ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(getRegistry());
-        scanner.doScan(basePackage);
+        scanner.doScan(basePackages);
     }
 }
