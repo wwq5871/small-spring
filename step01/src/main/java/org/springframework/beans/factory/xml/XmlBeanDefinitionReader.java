@@ -118,13 +118,16 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 if (StrUtil.isNotEmpty(propertyRefAttribute)) {
                     value = new BeanReference(propertyRefAttribute);
                 }
-                if (getRegistry().containsBeanDefinition(beanName)) {
-                    // beanName不能重名
-                    throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
-                }
-                // 注册BeanDefinition
-                getRegistry().registerBeanDefinition(beanName, beanDefinition);
+                PropertyValue propertyValue = new PropertyValue(propertyNameAttribute, value);
+                beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
+
             }
+            if (getRegistry().containsBeanDefinition(beanName)) {
+                // beanName不能重名
+                throw new BeansException("Duplicate beanName[" + beanName + "] is not allowed");
+            }
+            // 注册BeanDefinition
+            getRegistry().registerBeanDefinition(beanName, beanDefinition);
         }
     }
 }
