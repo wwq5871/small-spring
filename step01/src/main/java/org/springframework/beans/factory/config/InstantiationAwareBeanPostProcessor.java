@@ -43,6 +43,6 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 
 
     default Object getEarlyBeanReference(Object bean, String beanName) throws BeansException{
-     return bean;
+        return bean;
     }
 }
